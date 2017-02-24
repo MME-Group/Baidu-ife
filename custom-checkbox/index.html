@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="author" content="Reddy.Huang"/>
+    <title>Title</title>
+    <style>
+        .form-wrapper {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 600px;
+            height: 400px;
+            border: 1px solid gray;
+            border-radius: 5px;
+            box-shadow: rgba(255, 255, 255, 0.9) 0px 1px 0px inset, rgba(0, 0, 0, 0.03) 0px -1px 0px inset, rgba(0, 0, 0, 0.15) 0 15px 10px, rgba(0, 0, 0, 0.3) 0 8px 36px;
+        }
+
+        .form-wrapper input[type='checkbox'],
+        .form-wrapper input[type='radio'] {
+            display: none;
+        }
+
+        .checkbox-list,
+        .checkbox-list1,
+        .radio-list,
+        .radio-list1 {
+            margin: 30px;
+        }
+
+        .checkbox-list label {
+            display: inline-block;
+            width: 15px;
+            height: 19px;
+            margin-right: 100px;
+            background: url('./img/inputs.png') -19px -19px no-repeat;
+        }
+
+        .checkbox-list label::after {
+            content: 'checkbox';
+            margin-left: 20px;
+        }
+
+        .checkbox-list input:checked + label,
+        .checkbox-list1 input:checked + label::before {
+            background: url('./img/inputs.png') -19px 2px no-repeat;
+        }
+
+        .checkbox-list1 label,
+        .radio-list1 label {
+            margin-right: 32px;
+        }
+
+        .checkbox-list1 label::before {
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 19px;
+            background: url('./img/inputs.png') -19px -19px no-repeat;
+            vertical-align: top;
+        }
+        .checkbox-list1 label::after {
+            content: 'checkbox';
+            margin-left: 5px;
+        }
+        .radio-list label {
+            display: inline-block;
+            width: 15px;
+            height: 19px;
+            margin-right: 100px;
+            background: url('./img/inputs.png') 0 -18px no-repeat;
+        }
+        .radio-list label::after {
+            content: 'radio';
+            margin-left: 20px;
+        }
+        .radio-list input:checked + label,
+        .radio-list1 input:checked + label::before {
+            background: url('./img/inputs.png') 0 2px no-repeat;
+        }
+        .radio-list1 label::before {
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 19px;
+            background: url('./img/inputs.png') 0 -18px no-repeat;
+            vertical-align: top;
+        }
+        .radio-list1 label::after {
+            content: 'radio';
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="form-wrapper">
+    <form id="form">
+        <div class="checkbox-list">
+            <p>使用背景图模拟的checkbox</p>
+            <input type="checkbox" name="a" id="checkbox1"><label for="checkbox1"></label>
+            <input type="checkbox" name="a" id="checkbox2"><label for="checkbox2"></label>
+            <input type="checkbox" name="a" id="checkbox3"><label for="checkbox3"></label>
+        </div>
+        <div class="checkbox-list1">
+            <p>使用伪元素模拟的checkbox</p>
+            <input type="checkbox" name="b" id="checkbox4"><label for="checkbox4"></label>
+            <input type="checkbox" name="b" id="checkbox5"><label for="checkbox5"></label>
+            <input type="checkbox" name="b" id="checkbox6"><label for="checkbox6"></label>
+        </div>
+        <div class="radio-list">
+            <p>使用背景图模拟的radio</p>
+            <input type="radio" name="c" id="radio1"><label for="radio1"></label>
+            <input type="radio" name="c" id="radio2"><label for="radio2"></label>
+            <input type="radio" name="c" id="radio3"><label for="radio3"></label>
+        </div>
+        <div class="radio-list1">
+            <p>使用伪元素模拟的radio</p>
+            <input type="radio" name="d" id="radio4"><label for="radio4"></label>
+            <input type="radio" name="d" id="radio5"><label for="radio5"></label>
+            <input type="radio" name="d" id="radio6"><label for="radio6"></label>
+        </div>
+    </form>
+</div>
+</body>
+</html>
