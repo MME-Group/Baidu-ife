@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="author" content="Reddy.Huang <i@0u0b.com>"/>
+    <title>Observer</title>
+</head>
+<body>
+<h2>请打开控制台调试</h2>
+
+<script>
+  class Observer {
+    constructor(data) {
+      this.data = data;
+      this.find(data);
+    }
+
+    find(data) {
+      for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+          let v = data[key];
+          if (typeof v === 'object') {
+              new Observer(v);
+          }
+          this.reform(key, v);
+        }
+      }
+    }
+
+    reform(key, v) {
+      Object.defineProperty(this.data, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          console.log('你访问了' + key);
+          return v;
+        },
+        set(newV) {
+          console.log('你设置了' + key + '新的值为：' + newV);
+          if (newV === v) return;
+          v = newV;
+        }
+      })
+    }
+  }
+
+  let a = new Observer({
+    name: '小花',
+    age: 99,
+    info: {
+      say: '我是小花',
+      h: {
+        q: 1
+      }
+    }
+  });
+  console.log(a);
+</script>
+</body>
+</html>
