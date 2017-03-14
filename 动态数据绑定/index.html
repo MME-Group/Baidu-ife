@@ -11,69 +11,93 @@
 
 <script>
   class Observer {
-    constructor(data) {
+    constructor(data, parent, key) {
       this.data = data;
+      this._defProtected(this.data, '__parent__', parent);
+      this._defProtected(this.data, '__key__', key);
       this.find(data);
       this.events = new Event();
     }
 
+    // 查找这个data下的属性 若为对象 则递归 否则加getter setter
     find(data) {
       for (let key in data) {
         if (data.hasOwnProperty(key)) {
-          let v = data[key];
-          if (typeof v === 'object') {
-              new Observer(v);
+          let value = data[key];
+          if (typeof value === 'object') {
+            new Observer(value, this, key);
           }
-          this.reform(key, v);
+          this.reform(key, value);
         }
       }
     }
 
-    reform(key, v) {
+    reform(key, value) {
       let _this = this;
       Object.defineProperty(this.data, key, {
         enumerable: true,
         configurable: true,
         get() {
           console.log('你访问了' + key);
-          return v;
+          return value;
         },
         set(newV) {
+          if (newV === value) return;
           console.log('你设置了' + key + '新的值为：' + newV);
-          _this.events.emit(key, v, newV);
-          if (newV === v) return;
-          if (typeof newV === 'object') {
-              console.log('设置的新对象是object，将进行递归');
-              new Observer(newV);
+          _this.events.emit(key, value, newV);
+          if (_this.data.__parent__) {
+              _this._eventBubble(_this.data.__parent__, _this.data.__key__);
           }
-          v = newV;
+          if (typeof newV === 'object') {
+            console.log('设置的值是object，将进行递归');
+            new Observer(newV, _this, key);
+          }
+          value = newV;
         }
       });
     }
+
+    _eventBubble(ob, key) {
+      ob.events.emit(key);
+      if (ob.data.__parent__) {
+        this._eventBubble(ob.data.__parent__, ob.data.__key__);
+      }
+    }
+
     $watch(eventName, callback) {
-        this.events.add(eventName, callback);
+      this.events.add(eventName, callback);
+    }
+
+    _defProtected(obj, key, value) {
+      Object.defineProperty(obj, key, {
+        enumerable: false,
+        configurable: false,
+        value: value
+      });
+
     }
   }
 
-
   class Event {
-     constructor() {
-       this.eventList = {};
-     }
-     add(eventName, callback) {
-       if (this.eventList[eventName]) {
-         this.eventList[eventName].push(callback);
-       } else {
-         this.eventList[eventName] = [callback];
-       }
-     }
-     emit(eventName, ...args) {
-       if (this.eventList[eventName]) {
-         this.eventList[eventName].forEach((item) => {
-           item(...args);
-         });
-       }
-     }
+    constructor() {
+      this.eventList = {};
+    }
+
+    add(eventName, callback) {
+      if (this.eventList[eventName]) {
+        this.eventList[eventName].push(callback);
+      } else {
+        this.eventList[eventName] = [callback];
+      }
+    }
+
+    emit(eventName, ...args) {
+      if (this.eventList[eventName]) {
+        this.eventList[eventName].forEach((item) => {
+          item(...args);
+        });
+      }
+    }
   }
 
   let a = new Observer({
@@ -81,14 +105,15 @@
     age: 99,
     info: {
       say: '我是小花',
-      h: {
-        q: 1
+      more: {
+        hello: '你好'
       }
     }
   });
-  a.$watch('age', () => console.log('watch成功了'));
+
+  a.$watch('info', () => console.log('我的下层元素发生了变化'));
   console.log(a);
-  a.data.age = 1;
+  a.data.info.more.hello = 'hello';
 </script>
 </body>
 </html>
